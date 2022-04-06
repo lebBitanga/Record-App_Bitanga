@@ -19,9 +19,9 @@ Direction:
 
 ## These are the items you have to accomplished:  
 [/] Add assets to the project.  
-[x] Create includes directory; create navbar and sidebar.  
+[/] Create includes directory; create navbar and sidebar.  
 [/] Setup database configuration.  
-[x] Create page for List of office.
+[/] Create page for List of office.
 [x] Create page for List of employees.  
 [x] Create page for List of transactions.  
 [x] Create page for adding office.  
