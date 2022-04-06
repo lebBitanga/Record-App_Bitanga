@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
@@ -17,24 +16,6 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="assets/css/demo.css" rel="stylesheet" />
 </head>
-
-<?php
-
-require('config/config.php');
-require('config/db.php');
-
-$query = 'SELECT employee.lastname, employee.firstname,employee.address, office.name as office_name FROM employee, office WHERE employee.office_id = office.id';
-
-$result = mysqli_query($conn, $query);
-
-$offices = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-mysqli_free_result($result);
-
-mysqli_close($conn);
-
-?>
-
 <body>
     <div class="wrapper">
         <div class="sidebar" data-image="../assets/img/sidebar-5.jpg">
@@ -45,47 +26,83 @@ mysqli_close($conn);
         </div>
         <div class="main-panel">
             <?php include ('includes/navbar.php');?>
+            <?php 
+            
+                require('config/config.php');
+                require('config/db.php');
+                if(isset($_POST['submit'])){
+                $lastname =mysqli_real_escape_string($conn,$_POST['lastname']);
+                $firstname =mysqli_real_escape_string($conn,$_POST['firstname']);
+                $office_id =mysqli_real_escape_string($conn,$_POST['office']);
+                $address =mysqli_real_escape_string($conn,$_POST['address']);
+                $query = "INSERT INTO employee (lastname, firstname, office_id, address) VALUES ('$lastname','$firstname','$office_id','$address')";
+                    if (mysqli_query($conn, $query)){
+                    }else{
+                        echo 'ERROR:'. mysqli_error($conn);
+                    }
+                }
+            ?>
             <div class="content">
                 <div class="container-fluid">
                     <div class="section">
                     </div>
                     <div class="row">
-                                    <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
                         <div class="col-md-12">
-                            <div class="card strpied-tabled-with-hover">
-                                <br/>
-                                <div class="col-md-12">
-                                <a href="employee-add.php">
-                                    <button type="submit" class="btn btn-info btn-fill pull-right">Add New Employee</button>
-                                </a>
-                                <div class="card-header ">
-                                    <h4 class="card-title">Employee</h4>
-                                    <p class="card-category">Here is a subtitle for this table</p>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Add New Employee</h4>
                                 </div>
-                                <div class="card-body table-full-width table-responsive">
-                                    <table class="table table-hover table-striped">
-                                        <thead>
-                                            <th>Last Name</th>
-                                            <th>First Name</th>
-                                            <th>Address</th>
-                                            <th>Office</th>
-                                        </thead>
-                                        <tbody>
-                                        <?php foreach($offices as $office) : ?>
-                                            <tr>
-                                        <td><?php echo $office ['lastname']; ?></td>
-                                        <td><?php echo $office ['firstname']; ?></td>
-                                        <td><?php echo $office ['address']; ?></td>
-                                        <td><?php echo $office ['office_name']; ?></td>
-                                            </tr>
-                                            <?php endforeach ?>
-                                        </tbody>
-                                    </table>
+                                <div class="card-body">
+                                    <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>">
+                                        <div class="row">
+                                            <div class="col-md-4 pr-1">
+                                                <div class="form-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" class="form-control" name="lastname">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 pr-1">
+                                                <div class="form-group">
+                                                    <label>First Name</label>
+                                                    <input type="text" class="form-control" name="firstname">
+                                                </div>
+                                            </div>
+                                        
+                                        <div class="col-md-4 pl-1">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Office</label>
+                                                <select class="form-control" name="office">
+                                                    <option>
+                                                        Select...
+                                                    </option>
+                                                    <?php
+                                                        $query = "SELECT id, name FROM office";
+                                                        $result =mysqli_query($conn, $query);
+                                                        while ($row = mysqli_fetch_array($result)){
+                                                            echo "<option value=" . $row['id'].">" . $row['name'] . '</option>';
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        </div>
+                                         <div class="row">
+                                            <div class="col-md-4 pr-1">
+                                                <div class="form-group">
+                                                    <label>Address</label>
+                                                    <input type="text" class="form-control" name="address">
+                                                </div>
+                                            </div>
+                                        <button type="submit" 
+                                       name="submit" value="submit" class="btn btn-info btn-fill pull-right">Save</button>
+                                        <div class="clearfix"></div>
+                                    </form> 
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -143,5 +160,4 @@ mysqli_close($conn);
 <script src="assets/js/light-bootstrap-dashboard.js?v=2.0.0 " type="text/javascript"></script>
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
 <script src="assets/js/demo.js"></script>
-
 </html>
