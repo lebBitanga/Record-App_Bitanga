@@ -22,7 +22,23 @@
 require('config/config.php');
 require('config/db.php');
 
-$query = 'SELECT * FROM office ORDER BY name';
+$results_per_page = 20;
+
+$query =  "SELECT * FROM office";
+$result = mysqli_query($conn, $query);
+$number_of_result = mysqli_num_rows($result);
+
+$number_of_page=ceil($number_of_result/$results_per_page);
+
+if(!isset($_GET['page'])){
+    $page = 1;
+}else{
+    $page = $_GET['page'];
+}
+
+$page_first_result=($page-1) * $results_per_page;
+
+$query = 'SELECT * FROM office ORDER BY name LIMIT '. $page_first_result . ',' . $results_per_page;
 
 $result = mysqli_query($conn, $query);
 
@@ -60,7 +76,7 @@ mysqli_close($conn);
                                     <button type="submit" class="btn btn-info btn-fill pull-right">Add New Office</button>
                                 </a>
                                 <div class="card-header ">
-                                    <h4 class="card-title">Striped Table with Hover</h4>
+                                    <h4 class="card-title">Offices</h4>
                                     <p class="card-category">Here is a subtitle for this table</p>
                                 </div>
                                 <div class="card-body table-full-width table-responsive">
@@ -92,6 +108,11 @@ mysqli_close($conn);
                             </div>
                         </div>
                     </div>
+                    <?php
+                    for($page=1; $page <= $number_of_page; $page++){
+                        echo '<a href="office.php?page='. $page .'"> '. $page .'</a>';
+                    }
+                    ?>
                 </div>
             </div>
             <footer class="footer">
