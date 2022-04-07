@@ -22,7 +22,23 @@
 require('config/config.php');
 require('config/db.php');
 
-$query = 'SELECT CONCAT (employee.lastname,",",employee.firstname) AS employee_fullname, transaction.datelog, transaction.documentcode,transaction.action,transaction.remarks,office.name AS office_name FROM employee, office, transaction WHERE transaction.employee_id=employee.id AND employee.office_id = office.id';
+$results_per_page = 15;
+
+$query =  "SELECT * FROM transaction";
+$result = mysqli_query($conn, $query);
+$number_of_result = mysqli_num_rows($result);
+
+$number_of_page=ceil($number_of_result/$results_per_page);
+
+if(!isset($_GET['page'])){
+    $page = 1;
+}else{
+    $page = $_GET['page'];
+}
+
+$page_first_result=($page-1) * $results_per_page;
+
+$query = 'SELECT CONCAT (employee.lastname,",",employee.firstname) AS employee_fullname, transaction.datelog, transaction.documentcode,transaction.action,transaction.remarks,office.name AS office_name FROM employee, office, transaction WHERE transaction.employee_id=employee.id AND employee.office_id = office.id LIMIT '. $page_first_result . ',' . $results_per_page;
 
 $result = mysqli_query($conn, $query)or die( mysqli_error($conn));
 
@@ -88,6 +104,11 @@ mysqli_close($conn);
                             </div>
                         </div>
                     </div>
+                    <?php
+                    for($page=1; $page <= $number_of_page; $page++){
+                        echo '<a href="transaction.php?page='. $page .'"> '. $page .'</a>';
+                    }
+                    ?>
                 </div>
             </div>
             <footer class="footer">
