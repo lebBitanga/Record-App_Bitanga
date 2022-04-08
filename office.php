@@ -87,6 +87,7 @@ mysqli_close($conn);
                                 <a href="office-add.php">
                                     <button type="submit" class="btn btn-info btn-fill pull-right">Add New Office</button>
                                 </a>
+                            </td>
                                 <div class="card-header ">
                                     <h4 class="card-title">Offices</h4>
                                     <p class="card-category">Here is a subtitle for this table</p>
@@ -101,6 +102,7 @@ mysqli_close($conn);
                                             <th>City</th>
                                             <th>Country</th>
                                             <th>Postal</th>
+                                            <th>Action</th>
                                         </thead>
                                         <tbody>
                                         <?php foreach($offices as $office) : ?>
@@ -112,6 +114,11 @@ mysqli_close($conn);
                                         <td><?php echo $office ['city']; ?></td>
                                         <td><?php echo $office ['country']; ?></td>
                                         <td><?php echo $office ['postal']; ?></td>
+                                        <td>
+                                            <a href="office-edit.php?id=<?php echo $office['id']; ?>">
+                                                <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                            </a>  
+                                        </td>
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>

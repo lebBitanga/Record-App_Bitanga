@@ -98,6 +98,7 @@ mysqli_close($conn);
                                             <th>First Name</th>
                                             <th>Address</th>
                                             <th>Office</th>
+                                            <th>Action</th>
                                         </thead>
                                         <tbody>
                                         <?php foreach($employees as $employee) : ?>
@@ -106,6 +107,11 @@ mysqli_close($conn);
                                         <td><?php echo $employee ['firstname']; ?></td>
                                         <td><?php echo $employee ['address']; ?></td>
                                         <td><?php echo $employee ['office_name']; ?></td>
+                                        <td>
+                                            <a href="employee-edit.php?id=<?php echo $employee['id']; ?>">
+                                                <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                            </a>
+                                        </td>
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
