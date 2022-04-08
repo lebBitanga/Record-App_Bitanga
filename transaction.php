@@ -99,8 +99,10 @@ mysqli_close($conn);
                                             <th>Office</th>
                                             <th>Employee</th>
                                             <th>Remarks</th>
+                                            <td>Action</td>
                                         </thead>
                                         <tbody>
+                                            
                                 <?php foreach($transactions as $transaction) : ?>
                                             <tr>
                                         <td><?php echo $transaction ['datelog']; ?></td>
@@ -109,6 +111,13 @@ mysqli_close($conn);
                                         <td><?php echo $transaction ['office_name']; ?></td>
                                         <td><?php echo $transaction ['employee_fullname']; ?></td>
                                         <td><?php echo $transaction ['remarks']; ?></td>
+                                        <td>
+                                            <a href="transaction-Edit.php?id=<?php echo $transaction['id'] ?>">
+                                            <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                            </a>
+                                        </td>
+                                        </td>
+
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
