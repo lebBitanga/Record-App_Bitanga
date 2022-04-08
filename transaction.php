@@ -22,6 +22,8 @@
 require('config/config.php');
 require('config/db.php');
 
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
 $results_per_page = 15;
 
 $query =  "SELECT * FROM transaction";
@@ -38,7 +40,12 @@ if(!isset($_GET['page'])){
 
 $page_first_result=($page-1) * $results_per_page;
 
+if (strlen($search) > 0) {
+$query = 'SELECT CONCAT (employee.lastname,",",employee.firstname) AS employee_fullname, transaction.datelog, transaction.documentcode,transaction.action,transaction.remarks,office.name AS office_name FROM employee, office, transaction WHERE transaction.employee_id=employee.id AND employee.office_id = office.id AND transaction.documentcode ='. $search .' ORDER BY transaction.documentcode, transaction.datelog LIMIT '.$page_first_result.','.$results_per_page;
+}else{
+
 $query = 'SELECT CONCAT (employee.lastname,",",employee.firstname) AS employee_fullname, transaction.datelog, transaction.documentcode,transaction.action,transaction.remarks,office.name AS office_name FROM employee, office, transaction WHERE transaction.employee_id=employee.id AND employee.office_id = office.id LIMIT '. $page_first_result . ',' . $results_per_page;
+}
 
 $result = mysqli_query($conn, $query)or die( mysqli_error($conn));
 
@@ -69,6 +76,12 @@ mysqli_close($conn);
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
                                 <br/>
+                                <div class="col-md-12">
+                                    <form action="transaction.php" method="GET">
+                                        <input type="text" name="search" />
+                                        <input type="submit" value="Search" class="btn btn-info btn-fill" />
+                                    </form>   
+                                </div>  
                                 <div class="col-md-12">
                                 <a href="transaction-add.php">
                                     <button type="submit" class="btn btn-info btn-fill pull-right">Add New Transaction</button>
